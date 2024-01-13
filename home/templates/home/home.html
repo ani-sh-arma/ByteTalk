@@ -30,9 +30,9 @@
         </a>
     
         <div class=" flex absolute right-0 gap-5 mt-2">
-            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Home</div>    
-            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">About</div>    
-            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Contact</div>    
+            <a class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" href="{% url 'home' %}">Home</a>    
+            <a class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" href="{% url 'about' %}">About</a>    
+            <a class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" href="{% url 'contact' %}">Contact</a>   
             <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" id="username">{{user.username}}</div>   
             {% if user.is_authenticated %}
             

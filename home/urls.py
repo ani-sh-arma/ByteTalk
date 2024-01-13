@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(next_page = "/"), name="logout"),
     path('register/', views.register, name="register"),
     path('home/', views.home, name="home"),
+    path('about/', views.about , name="about"),
+    path('contact/', views.contact, name="contact"),
     path('chat/<id>', views.chat, name="chat"),
     path('send_message/', views.send_message, name="send_message"),
     path('get_latest_messages/<id>/', views.get_latest_messages, name="get_latest_messages"),
