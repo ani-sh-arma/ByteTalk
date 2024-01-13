@@ -1,0 +1,17 @@
+
+{% load static %}
+<nav class="w-screen h-20 bg-green-200 shadow-md flex gap-5 relative">
+
+
+    <a href="/">
+        <img src="/static/images/bytetalk.png" alt="" class=" h-fit w-20 ml-5"> 
+    </a>
+
+    <div class=" flex absolute right-0 gap-5">
+        <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Home</div>    
+        <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">About</div>    
+        <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Contact</div>    
+        <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center"> {{user.username}} </div>   
+    </div>
+
+</nav>

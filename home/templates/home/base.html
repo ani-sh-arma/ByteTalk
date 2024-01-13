@@ -1,0 +1,34 @@
+
+<!doctype html>
+<html lang="en">
+
+  {% load static tailwind_tags %}
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    {% tailwind_css %}
+
+    <title>
+      {% block title %} {% endblock title %}
+    </title>
+
+    {% block style %}
+    
+    {% endblock style %}
+
+  </head>
+  <body class="bg-cyan-50">
+
+      {% include "home/nav.html" %}
+
+      {% block main %}
+      
+      {% endblock main %}
+
+
+  </body>
+</html>

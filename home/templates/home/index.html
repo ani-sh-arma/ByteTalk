@@ -1,0 +1,65 @@
+
+<!doctype html>
+<html lang="en">
+
+  {% load static tailwind_tags %}
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    
+    {% tailwind_css %}
+
+    <title>
+        ByteTalk:
+    </title>
+
+  </head>
+  <body class="bg-cyan-50">
+
+
+
+<div class="flex h-screen w-screen">
+
+    <div class="h-screen w-6/12 bg-cyan-50">
+            
+        <div class=" text-5xl px-20 font-bold text-green-500 mt-40">
+            Byte Talk
+        </div>
+        <div class=" p-20 text-wrap text-xl text-green-500 ">
+            So many people have already joined, join right now to make friends.
+            <br><br>
+            <a href="/login">
+                <button class=" bg-green-600 text-white p-3 rounded-md hover:bg-green-700 ">
+                    Join Now 
+                </button>
+            </a>
+
+        </div>
+        
+        <div class="absolute  right-1/2 bottom-0">
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://lottie.host/3dd54486-fd01-4bff-8319-91bbf5887f77/Sz81jGPLyx.json" background="#ECFEFf" speed="1" style="width: 200px; height: 300px" loop autoplay direction="1" mode="normal"></lottie-player>
+        </div>
+        
+    </div>
+        
+    <div class="h-screen w-6/12 bg-green-200 flex flex-col">
+
+        <img src="/static/images/bytetalk.png" alt="ByteTalk" class="h-72 w-72 self-center mt-20">
+
+        <div class="quote text-center text-2xl">
+            Byte Talk 
+            <div class="text-xl mb-2"> Connecting Geeks. </div>
+        </div>
+
+        
+    </div>
+
+</div>
+
+
+</body>
+</html>

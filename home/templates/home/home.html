@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+
+  {% load static tailwind_tags %}
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+
+    
+    {% tailwind_css %}
+
+    <title>
+        {{user.username}}
+    </title>
+
+
+  </head>
+  <body class="bg-cyan-50 flex flex-col h-screen">
+
+    <nav class="w-screen h-20 bg-green-200 shadow-md flex gap-5 relative">
+
+
+        <a href="/">
+            <img src="/static/images/bytetalk.png" alt="" class=" h-fit w-20 ml-5"> 
+        </a>
+    
+        <div class=" flex absolute right-0 gap-5 mt-2">
+            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Home</div>    
+            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">About</div>    
+            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center">Contact</div>    
+            <div class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" id="username">{{user.username}}</div>   
+            {% if user.is_authenticated %}
+            
+            <form method="post" action="{% url 'logout' %}" class="hover:bg-green-500 h-full py-4 text-lg w-20 text-center" >
+                {% csrf_token %}
+                <input type="submit" value="Logout">
+            </form>
+            
+            {% endif %}
+        </div>
+    
+    </nav>
+
+
+
+    <div class=" flex flex-grow  w-screen">
+
+        <div class="h-full w-1/4  p-5 shadow-stone-800 flex flex-col " id="user-list">
+            
+            <form action="" class="h-10 mb-50 flex bg-white  w-full">
+
+                {% csrf_token %}
+
+                <input
+                type="text"
+                id="search"
+                name="search"
+                class="rounded-md flex-grow"
+                placeholder="Search"
+                />
+                
+                <button type="submit" class="w-auto h-full rounded-md  px-2">
+                    <i class="fas fa-search"></i>
+                </button>
+
+            </form>
+            
+            <div class="flex-grow mt-3 rounded-md">
+                
+                {% for user in users %}
+                
+
+                <a href="{% url 'chat' user.id %}">
+                    <div id="select_user" class="select_user bg-cyan-100 h-10 px-5 border-b-2 border-black rounded-md hover:cursor-pointer mb-1 py-1" data-user-id="{{ user.id }}">
+                        {{ user.username }}
+    
+                        <!-- <div class="friend float-right">
+                            <a href="add/">Add</a>
+                        </div> -->
+                    </div>
+                </a>
+
+                {% endfor %}
+
+                <!-- <script>
+                    document.querySelectorAll('.select_user').forEach(function(element) {
+
+                        element.addEventListener('click', function(e) {
+                            // e.preventDefault()
+                            let user_id = e.currentTarget.dataset.userId;
+                
+                            // Remove 'selected' class from all elements
+                            document.querySelectorAll('.select_user').forEach(function(el) {
+                                el.classList.remove('bg-cyan-100');
+                            });
+                
+                            // Add 'selected' class to the clicked element
+                            e.currentTarget.classList.add('bg-green-400');
+                            
+                            // Now 'selected' class is added to the clicked element
+                            // You can use this class for styling or other purposes
+                        });
+                    });
+                </script> -->
+
+            </div>
+                
+        </div>
+            
+        <div class="h-full w-3/4 bg-blue-200 flex flex-col relative" id="chat-area border-2 border-black">
+            <!-- <img src="/static/images/bytetalk.png" alt="ByteTalk" class="h-72 w-72 self-center mt-20 opacity-50 z-0"> -->
+            <div class="chat_name w-full h-10 text-center text-lg ">
+                Chat with {{chat_to.username}}
+            </div>
+
+            
+            <div class="flex-grow max-h-[75vh] overflow-y-auto flex flex-col gap-2 w-full bg-green-100 z-10 " id="chats-container">
+
+
+                
+            </div>
+
+            <script>
+                function updateMessages() {
+                    const receiverId = window.location.pathname.split('/').pop();
+                    
+                    // Use AJAX to fetch the latest messages from the server
+                    fetch(`/get_latest_messages/${receiverId}/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            // Update the HTML with the received data
+                            const messagesHTML = data.messages.map(message => `
+                                <div class="message min-w-52 max-w-[400px] bg-red-50  rounded-tr-lg rounded-tl-lg rounded-br-lg float-right my-2 mx-5">
+                                    <div class="text-md text-black bg-green-500 h-8 w-full rounded-tl-lg rounded-tr-lg px-3">${message.sender}</div><hr class="border-black"><div class="p-3"> ${message.message}</div>
+                                </div>
+                            `).join('');
+                
+                            document.getElementById('chats-container').innerHTML = messagesHTML;
+                        })
+                        .catch(error => console.error('Error fetching messages:', error));
+                }
+                
+                updateMessages();
+                setInterval(updateMessages, 1000);
+                
+            </script>
+            
+
+            <form id="message-form" class="w-full h-16 bg-black flex absolute bottom-0 z-20">
+                <input type="text" class="w-full bg-green-100 h-full flex-grow px-8" placeholder="Type a message" id="message">
+                <button type="submit" id="send" class="w-20 bg-cyan-300 h-full" data-user-id="{{ user.id }}">
+                    <i class="fas fa-paper-plane h-fit w-fit"></i>
+                </button>
+            </form>
+    
+            
+        </div>
+    
+
+
+    </div>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function(e) {
+            const send = document.getElementById("send");
+            const messageInput = document.getElementById("message");
+            const username = document.getElementById("username");
+            
+            // document.getElementById(userId).classList.add("bg-green-400");
+            // document.getElementById(userId).classList.remove("bg-cyan-100");
+            
+            send.addEventListener('click', function (e) {
+                
+                e.preventDefault()
+                
+                const button = event.currentTarget;
+                const userId = button.dataset.userId;
+                
+                const message = messageInput.value
+                
+                
+                
+                if(message === ""){
+                    alert("Enter a message please.")
+                }else{
+                    const receiverId = window.location.pathname.split('/').pop();
+    
+                    sendMessage(receiverId , message)
+                }
+
+
+            });
+            
+            async function sendMessage(receiverId, message) {
+                
+                const response = await fetch('/send_message/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}' 
+                    },
+                    body: JSON.stringify({
+                        receiverId,
+                        message 
+                    })
+                });
+                
+                if(response.ok) {
+                    console.log('Message sent successfully');
+                    messageInput.value = '';
+
+                    const chats = document.getElementById("chats-container");
+                    setTimeout(() => {
+                        chats.scrollTop = chats.scrollHeight;
+                        
+                        console.log(typeof(chats.scrollHeight))
+                        console.log(chats.scrollTop)
+                    }, 1000);
+                    
+                    
+                } else {
+                    console.log('Error sendind message');
+                    // handle error
+                }
+                
+            }
+
+        });
+
+
+
+    </script>
+
+  </body>
+  </html>
+
+
+{% comment %} {% for message in messages %}
+
+{% if message.sender == request.user %}
+    <div class="max-w-96 min-w-10 bg-red-50  rounded-tr-lg rounded-tl-lg rounded-bl-lg float-right my-2 mx-5">
+        <div id="message-from " class="text-md text-black bg-green-500 h-8 w-full rounded-tl-lg rounded-tr-lg px-3">
+            {{message.sender}}
+        </div><hr class="border-black">
+        <div id="message-text" class="p-3">
+            {{message.message}}
+            
+            {{message.sender}}
+            {{user.username}}
+        </div>
+        
+    </div>
+    
+    {% else %}
+    
+    <div class="max-w-96 min-w-10 bg-red-50  rounded-tr-lg rounded-tl-lg rounded-bl-lg float-right my-2 mx-5">
+    <div id="message-from " class="text-md text-black bg-blue-300 h-8 w-full rounded-tl-lg rounded-tr-lg px-3">
+        {{message.sender}}
+    </div><hr class="border-black">
+    <div id="message-text" class="p-3">
+        {{message.message}}
+        {{message.sender}}
+        {{user.username}}
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endfor %} {% endcomment %}
+
+
+
+{% comment %} function updateMessages() {
+    let chats = document.getElementById('chats');
+    const receiverId = window.location.pathname.split('/').pop();
+
+    // Use Ajax to fetch the latest messages
+    fetch(`/get_latest_messages/${receiverId}/`)
+        .then(response => response.json())
+        .then(data => {
+            // Render the latest messages
+            chats.innerHTML = data.messages.map(message => `
+                <!-- Your message rendering HTML here -->
+                <div class="max-w-96 min-w-10 bg-red-50 rounded-tr-lg rounded-tl-lg rounded-bl-lg float-right my-2 mx-5">
+                    <div id="message-from" class="text-md text-black bg-green-500 h-8 w-full rounded-tl-lg rounded-tr-lg px-3">
+                        ${message.sender}
+                    </div>
+                    <hr class="border-black">
+                    <div id="message-text" class="p-3">
+                        ${message.message}
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(error => {
+            console.error('Error fetching messages:', error);
+        });
+}
+
+// Call the updateMessages function every 1000 milliseconds (1 second)
+setInterval(updateMessages, 1000); {% endcomment %}
