@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-^$ppdpp5-+03pc4sw$sv)4%!qh=s1s(6(qc$__&059n--uhl%g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','127.0.0.1']
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -82,7 +82,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ByteTalk.wsgi.application'
+WSGI_APPLICATION = 'ByteTalk.wsgi.app'
 
 
 # Database
