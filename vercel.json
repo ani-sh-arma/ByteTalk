@@ -8,6 +8,10 @@
   ],
   "routes": [
     {
+      "src": "/staticfiles/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "ByteTalk/wsgi.py"
     }
